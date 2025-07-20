@@ -5,6 +5,7 @@ import { DifficultiesModule } from './modules/difficulties/difficulties.module';
 
 import { DbModule } from './db/db.module';
 import { ConfigModule } from '@nestjs/config';
+import { FoodRecipesModule } from './modules/food-recipes/food-recipes.module';
 import dbConfig from './db/db.config';
 
 @Module({
@@ -14,6 +15,7 @@ import dbConfig from './db/db.config';
     }),
     DbModule,
     DifficultiesModule,
+    FoodRecipesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
