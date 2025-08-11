@@ -17,16 +17,9 @@ describe('DifficultiesController (e2e)', () => {
   });
 
   it('/difficulties (GET)', () => {
-
-  const schema = {
-    properties: {
-      hello: { type: 'string' },
-    },
-    required: ['hello'],
-  };
-
+    const expected = [{"id":1,"name":"Easy"},{"id":2,"name":"Medium"},{"id":3,"name":"Hard"}];
     return request(app.getHttpServer())
       .get('/difficulties')
-      .expect(200, [{"id":1,"name":"Easy"},{"id":2,"name":"Medium"},{"id":3,"name":"Hard"}]);
+      .expect(200, expected);
   });
 });

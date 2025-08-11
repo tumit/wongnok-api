@@ -26,7 +26,6 @@ describe('CookingDurationsController (e2)', () => {
     ];
     return request(app.getHttpServer())
       .get('/cooking-durations')
-      .expect(200)
-      .expect((res) => expect(res.body).toEqual(expected));
+      .expect(200, expected);
   });
 });
