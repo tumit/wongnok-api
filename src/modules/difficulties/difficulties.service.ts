@@ -16,7 +16,7 @@ export class DifficultiesService {
     return this.repository.save(createDifficultyDto);
   }
   findAll() {
-    return `This action returns all difficulties`;
+    return this.repository.find();
   }
 
   findOne(id: number) {

@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
 
-xdescribe('AppController (e2e)', () => {
+describe('DifficultiesController (e2e)', () => {
   let app: INestApplication<App>;
 
   beforeEach(async () => {
@@ -16,10 +16,17 @@ xdescribe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('/difficulties (GET)', () => {
+
+  const schema = {
+    properties: {
+      hello: { type: 'string' },
+    },
+    required: ['hello'],
+  };
+
     return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+      .get('/difficulties')
+      .expect(200, [{"id":1,"name":"Easy"},{"id":2,"name":"Medium"},{"id":3,"name":"Hard"}]);
   });
 });
