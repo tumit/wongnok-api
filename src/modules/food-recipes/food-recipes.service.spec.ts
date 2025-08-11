@@ -1,8 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FoodRecipesService } from './food-recipes.service';
+import { FoodRecipeEntity } from './entities/food-recipe.entity';
+import { Repository } from 'typeorm';
 
 describe('FoodRecipesService', () => {
   let service: FoodRecipesService;
+  let repository = jest.doMock
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
