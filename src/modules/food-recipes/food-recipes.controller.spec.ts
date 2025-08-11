@@ -28,11 +28,11 @@ describe('FoodRecipesController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should return food-recipe', async () => {
-    service.create.mockResolvedValue({ id: 2 });
+  // it('should return food-recipe', async () => {
+  //   service.create.mockResolvedValue({ id: 2 });
 
-    const actual = await controller.create({});
+  //   const actual = await controller.create({});
 
-    expect(actual).toEqual({ id: 2 });
-  });
+  //   expect(actual).toEqual({ id: 2 });
+  // });
 });

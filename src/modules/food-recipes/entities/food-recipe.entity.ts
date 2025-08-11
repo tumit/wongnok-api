@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Difficulty } from '../../difficulties/entities/difficulty.entity';
 
 @Entity('food_recipes')
 export class FoodRecipeEntity {
@@ -26,6 +33,9 @@ export class FoodRecipeEntity {
   @Column({ name: 'user_id' })
   userId: number;
 
-  @Column({ name: 'difficulty_id' })
-  difficultyId: number;
+  // @Column({ name: 'difficulty_id' })
+  // difficultyId: number;
+  @ManyToOne(() => Difficulty)
+  @JoinColumn({ referencedColumnName: 'id' })
+  difficulty: Difficulty;
 }

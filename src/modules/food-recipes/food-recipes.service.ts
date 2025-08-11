@@ -2,7 +2,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
-import { CreateFoodRecipeDto, CreateFoodRecipeDtoResponse } from './dto/create-food-recipe.dto';
+import { Difficulty } from '../difficulties/entities/difficulty.entity';
+import {
+  CreateFoodRecipeDto,
+  CreateFoodRecipeDtoResponse,
+} from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
 import { FoodRecipeEntity } from './entities/food-recipe.entity';
 
@@ -16,7 +20,6 @@ export class FoodRecipesService {
   ) {}
 
   search(name: string, sort: string, options: IPaginationOptions) {
-
     const builder = this.repository.createQueryBuilder('food_recipes');
 
     if (name) {
@@ -31,12 +34,28 @@ export class FoodRecipesService {
     return paginate<FoodRecipeEntity>(builder, options);
   }
 
-  create(createFoodRecipeDto: CreateFoodRecipeDto): Promise<CreateFoodRecipeDtoResponse> {
-    return new Promise((resolve) => resolve({ id: 2}));
+  create(
+    createFoodRecipeDto: CreateFoodRecipeDto,
+  ): Promise<CreateFoodRecipeDtoResponse> {
+    const { difficultyId, ...dto } = { ...createFoodRecipeDto };
+    return this.repository.save({
+      ...dto,
+      difficulty: { id: difficultyId } as Difficulty,
+      userId: -1,
+    });
   }
 
   findAll() {
-    return this.repository.find();
+    // return this.repository.find({ relations: ['difficulty'] });
+    return this.repository
+      .createQueryBuilder('foodRecipe')
+      .innerJoin('foodRecipe.difficulty', 'difficulty')
+      .select([
+        'foodRecipe',
+        'difficulty.id',
+        'difficulty.name',
+      ])
+      .getMany();
   }
 
   findOne(id: number) {

@@ -9,3 +9,18 @@ GET http://localhost:3000/food-recipes/search?name=ke&sort=desc
 
 ###
 GET http://localhost:3000/food-recipes
+
+
+###
+POST http://localhost:3000/food-recipes
+Content-Type: application/json
+
+{
+  "name": "Spaghetti",
+  "description": "A classic Italian pasta dish.",
+  "ingredient": "Spaghetti, Tomato Sauce, Garlic, Olive Oil",
+  "instruction": "Cook spaghetti, heat sauce, mix together.",
+  "difficultyId": 1,
+  "cookingDurationId": 2,
+  "imageUrl": ""
+}

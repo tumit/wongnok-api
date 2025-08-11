@@ -22,6 +22,7 @@ export const dataSourceOpts: DataSourceOptions = {
 export default registerAs('typeormOpts', () => ({
   ...dataSourceOpts,
   autoLoadEntities: `${process.env.DB_AUTO_LOAD_ENTITIES}` === 'true',
+  logging: true
 }));
 
 export const dataSource = new DataSource(dataSourceOpts);
