@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
-import { CreateFoodRecipeDto } from './dto/create-food-recipe.dto';
+import { CreateFoodRecipeDto, CreateFoodRecipeDtoResponse } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
 import { FoodRecipeEntity } from './entities/food-recipe.entity';
 
@@ -15,7 +15,7 @@ export class FoodRecipesService {
     private readonly repository: Repository<FoodRecipeEntity>,
   ) {}
 
-  async search(name: string, sort: string, options: IPaginationOptions) {
+  search(name: string, sort: string, options: IPaginationOptions) {
 
     const builder = this.repository.createQueryBuilder('food_recipes');
 
@@ -31,8 +31,8 @@ export class FoodRecipesService {
     return paginate<FoodRecipeEntity>(builder, options);
   }
 
-  create(createFoodRecipeDto: CreateFoodRecipeDto) {
-    return 'This action adds a new foodRecipe';
+  create(createFoodRecipeDto: CreateFoodRecipeDto): Promise<CreateFoodRecipeDtoResponse> {
+    return new Promise((resolve) => resolve({ id: 2}));
   }
 
   findAll() {
@@ -51,7 +51,7 @@ export class FoodRecipesService {
     return `This action removes a #${id} foodRecipe`;
   }
 
-  async queryBuilder(alias: string) {
+  queryBuilder(alias: string) {
     return this.repository.createQueryBuilder(alias);
   }
 }

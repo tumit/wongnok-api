@@ -15,7 +15,7 @@ export class DifficultiesService {
   create(createDifficultyDto: CreateDifficultyDto): Promise<Difficulty | null> {
     return this.repository.save(createDifficultyDto);
   }
-  findAll() {
+  findAll(): Promise<Difficulty[]> {
     return this.repository.find();
   }
 

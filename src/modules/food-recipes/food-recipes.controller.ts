@@ -13,7 +13,7 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { FoodRecipesService } from './food-recipes.service';
-import { CreateFoodRecipeDto } from './dto/create-food-recipe.dto';
+import { CreateFoodRecipeDto, CreateFoodRecipeDtoResponse } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
 
 @Controller('food-recipes')
@@ -36,7 +36,7 @@ export class FoodRecipesController {
   }
 
   @Post()
-  create(@Body() createFoodRecipeDto: CreateFoodRecipeDto) {
+  create(@Body() createFoodRecipeDto: CreateFoodRecipeDto): Promise<CreateFoodRecipeDtoResponse> {
     return this.foodRecipesService.create(createFoodRecipeDto);
   }
 
