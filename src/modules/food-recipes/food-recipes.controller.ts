@@ -51,10 +51,7 @@ export class FoodRecipesController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateFoodRecipeDto: UpdateFoodRecipeDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateFoodRecipeDto: UpdateFoodRecipeDto) {
     return this.foodRecipesService.update(+id, updateFoodRecipeDto);
   }
 

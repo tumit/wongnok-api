@@ -3,14 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { Difficulty } from '../difficulties/entities/difficulty.entity';
-import {
-  CreateFoodRecipeDto,
-  CreateFoodRecipeDtoResponse,
-} from './dto/create-food-recipe.dto';
-import {
-  ResponseFoodRecipeDto,
-  toResponseFoodRecipeDto,
-} from './dto/response-food-recipe.dto';
+import { CreateFoodRecipeDto, CreateFoodRecipeDtoResponse } from './dto/create-food-recipe.dto';
+import { ResponseFoodRecipeDto, toResponseFoodRecipeDto } from './dto/response-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
 import { FoodRecipeEntity } from './entities/food-recipe.entity';
 
@@ -38,15 +32,13 @@ export class FoodRecipesService {
     return paginate<FoodRecipeEntity>(builder, options);
   }
 
-  create(
-    createFoodRecipeDto: CreateFoodRecipeDto,
-  ): Promise<CreateFoodRecipeDtoResponse> {
-    const { difficultyId, ...dto } = { ...createFoodRecipeDto };
-    return this.repository.save({
-      ...dto,
-      difficulty: { id: difficultyId } as Difficulty,
+  async create(createFoodRecipeDto: CreateFoodRecipeDto): Promise<CreateFoodRecipeDtoResponse> {
+    const result = await this.repository.save({
+      ...createFoodRecipeDto,
       userId: -1,
     });
+
+    return { id: result.id }
   }
 
   async findAll(): Promise<ResponseFoodRecipeDto[]> {

@@ -23,9 +23,12 @@
     "migration:run": "npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert",
     "migration:create": "npx typeorm migration:create",
-    "schema:drop": "npx typeorm schema:drop -d dist/db/db.config.js"
+    "schema:drop": "npx typeorm schema:drop -d dist/db/db.config.js",
+    "seed:run": "npm run build && ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d src/seeds/seed.config.ts",
+    "seed:create": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:create"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
@@ -40,7 +43,8 @@
     "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.25"
+    "typeorm": "^0.3.25",
+    "typeorm-extension": "^3.7.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

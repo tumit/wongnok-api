@@ -4,9 +4,12 @@ import { AppModule } from '@root/src/app.module';
 import * as request from 'supertest';
 import { App } from 'supertest/types';
 import { matchers } from 'jest-json-schema';
+import { fakeFoodRecipeEntity } from '@root/src/seeds/food-recipe.factory';
+import { DataSource } from 'typeorm';
 
 describe('FoodRecipesController (e2e)', () => {
   let app: INestApplication<App>;
+  let dataSource: DataSource;
 
   beforeAll(async () => {
     expect.extend(matchers);
@@ -15,6 +18,19 @@ describe('FoodRecipesController (e2e)', () => {
     }).compile();
     app = moduleFixture.createNestApplication();
     await app.init();
+
+    dataSource = app.get(DataSource);
+    await dataSource.query('BEGIN');
+  });
+
+  afterEach(async () => {
+    await dataSource.query('ROLLBACK');
+    await dataSource.query('BEGIN'); // start new transaction for next test
+  });
+
+  afterAll(async () => {
+    await dataSource.destroy();
+    await app.close();
   });
 
   it('/food-recipes (GET)', async () => {
@@ -48,7 +64,7 @@ describe('FoodRecipesController (e2e)', () => {
           'instruction',
           'imageUrl',
           'difficulty',
-          'cookingDurationId'
+          'cookingDurationId',
         ],
         additionalProperties: false,
       },
@@ -58,12 +74,26 @@ describe('FoodRecipesController (e2e)', () => {
       .get('/food-recipes')
       .expect(200)
       .expect(({ body }) => {
-        console.log(body);
         expect(body).toMatchSchema(schema);
       });
   });
 
-  afterAll(async () => {
-    await app.close();
+  it('should create new food-recipe', () => {
+    const { userId, ...dto } = { ...fakeFoodRecipeEntity() };
+
+    const schema = {
+      properties: {
+        id: { type: 'number' },
+      },
+      request: ['id'],
+    };
+
+    return request(app.getHttpServer())
+      .post('/food-recipes')
+      .send(dto)
+      .expect(201)
+      .expect(({ body }) => {
+        expect(body).toMatchSchema(schema);
+      });
   });
 });

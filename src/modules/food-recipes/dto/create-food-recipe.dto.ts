@@ -3,7 +3,7 @@ export class CreateFoodRecipeDto  {
   description: string
   ingredient: string
   instruction: string
-  difficultyId: number
+  difficulty: { id: number }
   cookingDurationId: number
   imageUrl: string
 

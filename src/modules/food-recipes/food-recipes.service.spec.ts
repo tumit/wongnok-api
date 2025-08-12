@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { mockSelectQueryBuilder } from '@root/src/test-utils/jest-mock-typeorm';
+import { mockSelectQueryBuilder } from '@root/test/utils/jest-mock-typeorm';
 import { FoodRecipeEntity } from './entities/food-recipe.entity';
 import { FoodRecipesService } from './food-recipes.service';
 
