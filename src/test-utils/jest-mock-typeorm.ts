@@ -13,6 +13,7 @@ export function mockSelectQueryBuilder<T extends ObjectLiteral>(): {
   queryBuilder.innerJoin.mockReturnValue(queryBuilder);
   queryBuilder.innerJoinAndSelect.mockReturnValue(queryBuilder);
   queryBuilder.where.mockReturnValue(queryBuilder);
+  queryBuilder.orderBy.mockReturnValue(queryBuilder);
   queryBuilder.select.mockReturnValue(queryBuilder);
   return { repository, queryBuilder };
 }

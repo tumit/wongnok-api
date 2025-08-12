@@ -7,6 +7,10 @@ import {
   CreateFoodRecipeDto,
   CreateFoodRecipeDtoResponse,
 } from './dto/create-food-recipe.dto';
+import {
+  ResponseFoodRecipeDto,
+  toResponseFoodRecipeDto,
+} from './dto/response-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
 import { FoodRecipeEntity } from './entities/food-recipe.entity';
 
@@ -20,15 +24,15 @@ export class FoodRecipesService {
   ) {}
 
   search(name: string, sort: string, options: IPaginationOptions) {
-    const builder = this.repository.createQueryBuilder('food_recipes');
+    const builder = this.repository.createQueryBuilder('foodRecipe');
 
     if (name) {
-      builder.where('food_recipes.name like :name ', { name: `%${name}%` });
+      builder.where('foodRecipe.name like :name ', { name: `%${name}%` });
     }
 
     if (sort) {
       const order = sort.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
-      builder.orderBy('food_recipes.name', order);
+      builder.orderBy('foodRecipe.name', order);
     }
 
     return paginate<FoodRecipeEntity>(builder, options);
@@ -45,17 +49,14 @@ export class FoodRecipesService {
     });
   }
 
-  findAll() {
+  async findAll(): Promise<ResponseFoodRecipeDto[]> {
     // return this.repository.find({ relations: ['difficulty'] });
-    return this.repository
+    const results = await this.repository
       .createQueryBuilder('foodRecipe')
       .innerJoin('foodRecipe.difficulty', 'difficulty')
-      .select([
-        'foodRecipe',
-        'difficulty.id',
-        'difficulty.name',
-      ])
+      .select(['foodRecipe', 'difficulty'])
       .getMany();
+    return results.map(toResponseFoodRecipeDto);
   }
 
   findOne(id: number) {
