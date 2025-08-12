@@ -8,6 +8,5 @@
   },
   "moduleNameMapper": {
     "^@root(.*)$": "../$1"
-  },
-  "allowJs": true
+  }
 }

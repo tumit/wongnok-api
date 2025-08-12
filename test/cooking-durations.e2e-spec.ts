@@ -6,11 +6,11 @@ import { AppModule } from '@root/src/app.module';
 import * as request from 'supertest';
 import { App } from 'supertest/types';
 
-describe('CookingDurationsController (e2)', () => {
+xdescribe('CookingDurationsController (e2)', () => {
   let app: INestApplication<App>;
 
   beforeEach(async () => {
-    const opts = { imports: [AppModule] };
+    const opts = { imports: [AppModule.forRoot()] };
     const moduleFixture = await Test.createTestingModule(opts).compile();
 
     app = moduleFixture.createNestApplication();

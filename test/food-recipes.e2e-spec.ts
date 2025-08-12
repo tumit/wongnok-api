@@ -6,30 +6,34 @@ import { App } from 'supertest/types';
 import { matchers } from 'jest-json-schema';
 import { fakeFoodRecipeEntity } from '@root/src/seeds/food-recipe.factory';
 import { DataSource } from 'typeorm';
+import { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
+import { startPostgresContainer } from './utils/postgres-testcontainer';
 
 describe('FoodRecipesController (e2e)', () => {
   let app: INestApplication<App>;
+  let container: StartedPostgreSqlContainer;
   let dataSource: DataSource;
 
   beforeAll(async () => {
     expect.extend(matchers);
+
+    container = await startPostgresContainer();
+    process.env.DATABASE_URL = container.getConnectionUri();
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule.forRoot()],
     }).compile();
     app = moduleFixture.createNestApplication();
     await app.init();
 
     dataSource = app.get(DataSource);
-    await dataSource.query('BEGIN');
-  });
-
-  afterEach(async () => {
-    await dataSource.query('ROLLBACK');
-    await dataSource.query('BEGIN'); // start new transaction for next test
+    console.log('Loaded migrations:', dataSource.migrations);
+    await dataSource.runMigrations();
   });
 
   afterAll(async () => {
-    await dataSource.destroy();
+    await dataSource?.destroy();
+    await container.stop();
     await app.close();
   });
 

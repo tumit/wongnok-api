@@ -1,25 +1,38 @@
-import { Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DifficultiesModule } from './modules/difficulties/difficulties.module';
 
-import { DbModule } from './db/db.module';
-import { ConfigModule } from '@nestjs/config';
-import { FoodRecipesModule } from './modules/food-recipes/food-recipes.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { dataSourceOpts } from './data-source';
 import { CookingDurationsModule } from './modules/cooking-durations/cooking-durations.module';
-import dbConfig from './db/db.config';
-
-@Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true, load: [dbConfig]
-    }),
-    DbModule,
-    DifficultiesModule,
-    FoodRecipesModule,
-    CookingDurationsModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
-})
-export class AppModule {}
+import { FoodRecipesModule } from './modules/food-recipes/food-recipes.module';
+import * as path from 'path';
+@Module({})
+export class AppModule {
+  static forRoot(): DynamicModule {
+    return {
+      module: AppModule,
+      imports: [
+        TypeOrmModule.forRootAsync({
+          useFactory: () => {
+            // get current DATABASE_URL
+            const databaseUrl = process.env.DATABASE_URL;
+            if (!databaseUrl) throw new Error('DATABASE_URL not set');
+            return {
+              ...dataSourceOpts,
+              url: databaseUrl,
+              autoLoadEntities: `${process.env.DB_AUTO_LOAD_ENTITIES}` === 'true',
+              logging: true
+            };
+          },
+        }),
+        DifficultiesModule,
+        FoodRecipesModule,
+        CookingDurationsModule,
+      ],
+      controllers: [AppController],
+      providers: [AppService],
+    };
+  }
+}
