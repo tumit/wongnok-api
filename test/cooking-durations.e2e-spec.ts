@@ -6,7 +6,7 @@ import { AppModule } from '@root/src/app.module';
 import * as request from 'supertest';
 import { App } from 'supertest/types';
 
-xdescribe('CookingDurationsController (e2)', () => {
+describe('CookingDurationsController (e2)', () => {
   let app: INestApplication<App>;
 
   beforeEach(async () => {

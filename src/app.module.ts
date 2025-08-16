@@ -21,9 +21,7 @@ export class AppModule {
             if (!databaseUrl) throw new Error('DATABASE_URL not set');
             return {
               ...dataSourceOpts,
-              url: databaseUrl,
-              autoLoadEntities: `${process.env.DB_AUTO_LOAD_ENTITIES}` === 'true',
-              logging: true
+              url: databaseUrl
             };
           },
         }),

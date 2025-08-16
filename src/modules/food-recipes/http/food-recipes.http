@@ -2,9 +2,14 @@
 GET http://localhost:3000/food-recipes/search
 
 ###
-GET http://localhost:3000/food-recipes/search?name=e&page=2&limit=3
+GET http://localhost:3000/food-recipes/search?page=1&limit=5
+
 
 ###
+GET http://localhost:3000/food-recipes/paginate?page=1&limit=5
+
+
+
 GET http://localhost:3000/food-recipes/search?name=ke&sort=desc
 
 ###

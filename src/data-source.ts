@@ -9,6 +9,7 @@ dotenvConfig({ quiet: true });
 
 export const dataSourceOpts: DataSourceOptions & SeederOptions = {
   type: 'postgres',
+  logging: true,
   url: `${process.env.DATABASE_URL}`,
   ssl: `${process.env.DB_SSL}` === 'true',
   synchronize: `${process.env.DB_SYNCHRONIZE}` === 'true',

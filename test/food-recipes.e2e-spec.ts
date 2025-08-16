@@ -11,29 +11,18 @@ import { startPostgresContainer } from './utils/postgres-testcontainer';
 
 describe('FoodRecipesController (e2e)', () => {
   let app: INestApplication<App>;
-  let container: StartedPostgreSqlContainer;
-  let dataSource: DataSource;
 
   beforeAll(async () => {
     expect.extend(matchers);
-
-    container = await startPostgresContainer();
-    process.env.DATABASE_URL = container.getConnectionUri();
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule.forRoot()],
     }).compile();
     app = moduleFixture.createNestApplication();
     await app.init();
-
-    dataSource = app.get(DataSource);
-    console.log('Loaded migrations:', dataSource.migrations);
-    await dataSource.runMigrations();
   });
 
   afterAll(async () => {
-    await dataSource?.destroy();
-    await container.stop();
     await app.close();
   });
 

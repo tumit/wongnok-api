@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
-import { Difficulty } from '../difficulties/entities/difficulty.entity';
+import { applyQuery } from 'typeorm-extension';
 import { CreateFoodRecipeDto, CreateFoodRecipeDtoResponse } from './dto/create-food-recipe.dto';
 import { ResponseFoodRecipeDto, toResponseFoodRecipeDto } from './dto/response-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
@@ -17,16 +17,14 @@ export class FoodRecipesService {
     private readonly repository: Repository<FoodRecipeEntity>,
   ) {}
 
-  search(name: string, sort: string, options: IPaginationOptions) {
-    const builder = this.repository.createQueryBuilder('foodRecipe');
+  search(keyword: string, options: IPaginationOptions) {
+    const builder = this.repository
+      .createQueryBuilder('foodRecipe')
+      .innerJoinAndSelect('foodRecipe.difficulty', 'difficulty')
+      .orderBy('foodRecipe.name', 'DESC');
 
-    if (name) {
-      builder.where('foodRecipe.name like :name ', { name: `%${name}%` });
-    }
-
-    if (sort) {
-      const order = sort.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
-      builder.orderBy('foodRecipe.name', order);
+    if (keyword) {
+      builder.where('foodRecipe.name like :name ', { name: `%${keyword}%` });
     }
 
     return paginate<FoodRecipeEntity>(builder, options);
@@ -38,7 +36,7 @@ export class FoodRecipesService {
       userId: -1,
     });
 
-    return { id: result.id }
+    return { id: result.id };
   }
 
   async findAll(): Promise<ResponseFoodRecipeDto[]> {
@@ -52,7 +50,7 @@ export class FoodRecipesService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} foodRecipe`;
+    return ;
   }
 
   update(id: number, updateFoodRecipeDto: UpdateFoodRecipeDto) {

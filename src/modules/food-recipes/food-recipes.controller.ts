@@ -24,12 +24,13 @@ export class FoodRecipesController {
 
   @Get('search')
   async search(
-    @Query('name') name: string,
-    @Query('sort') sort: string,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+    @Query('keyword') keyword: string,
   ) {
-    return this.foodRecipesService.search(name, sort, {
+    console.log('page', page);
+    console.log('limit', limit);
+    return this.foodRecipesService.search(keyword, {
       page,
       limit,
     });
