@@ -6,7 +6,6 @@ export class CreateFoodRecipeDto  {
   difficulty: { id: number }
   cookingDurationId: number
   imageUrl: string
-
 }
 export class CreateFoodRecipeDtoResponse {
   id: number;

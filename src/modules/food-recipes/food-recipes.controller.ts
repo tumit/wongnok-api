@@ -11,6 +11,8 @@ import {
   Query,
   DefaultValuePipe,
   ParseIntPipe,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { FoodRecipesService } from './food-recipes.service';
 import { CreateFoodRecipeDto, CreateFoodRecipeDtoResponse } from './dto/create-food-recipe.dto';
@@ -57,6 +59,7 @@ export class FoodRecipesController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {
     return this.foodRecipesService.remove(+id);
   }

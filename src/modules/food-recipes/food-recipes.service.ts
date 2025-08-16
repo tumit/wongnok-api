@@ -10,6 +10,8 @@ import { FoodRecipeEntity } from './entities/food-recipe.entity';
 
 @Injectable()
 export class FoodRecipesService {
+  readonly alias = 'foodRecipe';
+
   private readonly logger = new Logger(FoodRecipesService.name);
 
   constructor(
@@ -17,16 +19,18 @@ export class FoodRecipesService {
     private readonly repository: Repository<FoodRecipeEntity>,
   ) {}
 
-  search(keyword: string, options: IPaginationOptions) {
-    const builder = this.repository
+  private queryBuilder() {
+    return this.repository
       .createQueryBuilder('foodRecipe')
       .innerJoinAndSelect('foodRecipe.difficulty', 'difficulty')
       .orderBy('foodRecipe.name', 'DESC');
+  }
 
+  search(keyword: string, options: IPaginationOptions) {
+    const builder = this.queryBuilder();
     if (keyword) {
       builder.where('foodRecipe.name like :name ', { name: `%${keyword}%` });
     }
-
     return paginate<FoodRecipeEntity>(builder, options);
   }
 
@@ -40,7 +44,6 @@ export class FoodRecipesService {
   }
 
   async findAll(): Promise<ResponseFoodRecipeDto[]> {
-    // return this.repository.find({ relations: ['difficulty'] });
     const results = await this.repository
       .createQueryBuilder('foodRecipe')
       .innerJoin('foodRecipe.difficulty', 'difficulty')
@@ -50,18 +53,17 @@ export class FoodRecipesService {
   }
 
   findOne(id: number) {
-    return ;
+    const builder = this.queryBuilder();
+    builder.where('foodRecipe.id = :id ', { id });
+    return builder.getOne();
   }
 
   update(id: number, updateFoodRecipeDto: UpdateFoodRecipeDto) {
-    return `This action updates a #${id} foodRecipe`;
+    return this.repository.save({ id, ...updateFoodRecipeDto });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} foodRecipe`;
+    return this.repository.delete({ id });
   }
 
-  queryBuilder(alias: string) {
-    return this.repository.createQueryBuilder(alias);
-  }
 }
