@@ -1,21 +1,24 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
-import { LoggedInDto } from './dto/logged-in.dto';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../modules/users/users.service';
 import { randomUUID } from 'crypto';
-import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-
+import { LoggedInDto } from './dto/logged-in.dto';
+import { jwtVerify, createRemoteJWKSet } from 'jose';
 @Injectable()
 export class AuthService {
   private logger = new Logger();
+  private jwks: ReturnType<typeof createRemoteJWKSet>;
 
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
     private http: HttpService,
-  ) {}
+  ) {
+    const jwksUri = `${this.configService.get('OAUTH2_ISSUER')}/protocol/openid-connect/certs`;
+    this.jwks = createRemoteJWKSet(new URL(jwksUri));
+  }
 
   getRedirectAuthenticationUrl(): { state: string; url: string } {
     const auth_url = this.configService.get('OAUTH2_AUTH_URL');
@@ -44,13 +47,23 @@ export class AuthService {
 
     const { data } = await firstValueFrom(response$);
 
-    console.log('exchange', data)
+    // console.log('exchange', data);
 
     return this.validateUserByAccessToken(data.id_token);
   }
 
   async validateUserByAccessToken(token: string): Promise<LoggedInDto> {
-    const userInfo: { preferred_username: string } = await this.jwtService.decode(token);
+    // const userInfo: { preferred_username: string } = await this.jwtService.decode(token);
+
+    console.log('token', token)
+    console.log('issuer', this.configService.get('OAUTH2_ISSUER'))
+    console.log('audience', this.configService.get('OAUTH2_CLIENT_ID'))
+    const { payload } = await jwtVerify(token, this.jwks, {
+      issuer: this.configService.get('OAUTH2_ISSUER'),
+      audience: this.configService.get('OAUTH2_CLIENT_ID'),
+    });
+
+    console.log('payload={}', payload)
 
     // const user = await this.usersService.findOneByUsername(userInfo.preferred_username);
     // if (!user) {
