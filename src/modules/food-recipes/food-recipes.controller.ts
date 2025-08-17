@@ -29,9 +29,9 @@ export class FoodRecipesController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
     @Query('keyword') keyword: string,
+    @Query('mine') mine: string,
   ) {
-    console.log('page', page);
-    console.log('limit', limit);
+    console.log('mine', mine)
     return this.foodRecipesService.search(keyword, {
       page,
       limit,

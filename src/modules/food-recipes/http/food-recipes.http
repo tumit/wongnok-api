@@ -6,6 +6,11 @@ GET http://localhost:3000/food-recipes/search?page=1&limit=5
 
 
 ###
+GET http://localhost:3000/food-recipes/search?page=1&limit=5&mine=true
+
+
+
+###
 GET http://localhost:3000/food-recipes/paginate?page=1&limit=5
 
 

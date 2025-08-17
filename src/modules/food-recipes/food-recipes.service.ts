@@ -26,12 +26,13 @@ export class FoodRecipesService {
       .orderBy('foodRecipe.name', 'DESC');
   }
 
-  search(keyword: string, options: IPaginationOptions) {
+  async search(keyword: string, options: IPaginationOptions) {
     const builder = this.queryBuilder();
     if (keyword) {
       builder.where('foodRecipe.name like :name ', { name: `%${keyword}%` });
     }
-    return paginate<FoodRecipeEntity>(builder, options);
+    const paging = await paginate<FoodRecipeEntity>(builder, options);
+    return { total: paging.meta.totalItems, results: paging.items }
   }
 
   async create(createFoodRecipeDto: CreateFoodRecipeDto): Promise<CreateFoodRecipeDtoResponse> {
