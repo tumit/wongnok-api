@@ -1,6 +1,0 @@
-
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-
-export const Cookies: ParameterDecorator = createParamDecorator((data: string) => {
-
-})

@@ -1,40 +1,33 @@
-import { Controller, Get, Req, Res, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
+
   constructor(private readonly authService: AuthService) {}
 
-  @Get('redirect-url')
-  redirectAuthenticationUrl(@Res({ passthrough: true }) response: Response): { state: string; url: string } {
-    return this.authService.getRedirectAuthenticationUrl();
-  }
-
-    @Get('redirect-url-c')
-  redirectAuthenticationUrlC(@Res({ passthrough: true }) response: Response) {
-    return this.authService.getRedirectByClient();
-  }
-
   @Get('redirect')
-  redirectToAuthentication(@Res({ passthrough: true }) response: Response) {
-    const { state, url } = this.authService.getRedirectAuthenticationUrl();
+  async redirectToAuthentication(@Res({ passthrough: true }) response: Response) {
+    const { state, redirectUrl } = await this.authService.getRedirectAuthenticationUrl();
     response.cookie('state', state);
-    response.redirect(url);
+    response.redirect(redirectUrl);
     return;
   }
 
-  @Get('login')
-  login(@Req() request: Request) {
-
-    const refState = `${request.cookies['state']}`;
-    const reqState = `${request.query['state']}`;
-    if (refState != reqState) {
-      throw new UnauthorizedException();
-    }
-
-    const code = `${request.query['code']}`;
-    return this.authService.exchange(code);
+  @Get('callback')
+  async login(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
+    const { idToken, payload } = await this.authService.callback(request)
+    response.cookie('idToken', idToken);
+    return payload
   }
+
+  @Get('logout')
+  async logout(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
+    const logoutUrl = await this.authService.logout(request)
+    response.redirect(logoutUrl);
+    return
+  }
+
 }

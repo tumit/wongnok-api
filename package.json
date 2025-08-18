@@ -44,6 +44,7 @@
     "dotenv": "^17.0.0",
     "jose": "^6.0.12",
     "json-server": "^0.17.3",
+    "nest-winston": "^1.10.2",
     "nestjs-typeorm-paginate": "^4.1.0",
     "openid-client": "^6.6.4",
     "passport": "^0.7.0",
@@ -54,7 +55,9 @@
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.25",
     "typeorm-extension": "^3.7.1",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
