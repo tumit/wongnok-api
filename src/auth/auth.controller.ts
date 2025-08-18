@@ -12,6 +12,11 @@ export class AuthController {
     return this.authService.getRedirectAuthenticationUrl();
   }
 
+    @Get('redirect-url-c')
+  redirectAuthenticationUrlC(@Res({ passthrough: true }) response: Response) {
+    return this.authService.getRedirectByClient();
+  }
+
   @Get('redirect')
   redirectToAuthentication(@Res({ passthrough: true }) response: Response) {
     const { state, url } = this.authService.getRedirectAuthenticationUrl();

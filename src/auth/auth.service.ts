@@ -6,6 +6,8 @@ import { randomUUID } from 'crypto';
 import { firstValueFrom } from 'rxjs';
 import { LoggedInDto } from './dto/logged-in.dto';
 import { jwtVerify, createRemoteJWKSet } from 'jose';
+import * as client from 'openid-client'
+
 @Injectable()
 export class AuthService {
   private logger = new Logger();
@@ -18,6 +20,57 @@ export class AuthService {
   ) {
     const jwksUri = `${this.configService.get('OAUTH2_ISSUER')}/protocol/openid-connect/certs`;
     this.jwks = createRemoteJWKSet(new URL(jwksUri));
+  }
+
+  async getRedirectByClient(): Promise<{ state: string; url: string }> {
+    let server: URL = new URL(this.configService.get('OAUTH2_ISSUER')!);
+    let clientId: string = this.configService.get('OAUTH2_CLIENT_ID')!
+    let clientSecret: string = this.configService.get('OAUTH2_CLIENT_SECRET')!
+
+    let config: client.Configuration = await client.discovery(
+      server,
+      clientId,
+      clientSecret,
+    )
+
+    let redirect_uri!: string
+    let scope!: string // Scope of the access request
+    /**
+     * PKCE: The following MUST be generated for every redirect to the
+     * authorization_endpoint. You must store the code_verifier and state in the
+     * end-user session such that it can be recovered as the user gets redirected
+     * from the authorization server back to your application.
+     */
+    let code_verifier: string = client.randomPKCECodeVerifier()
+    let code_challenge: string =
+      await client.calculatePKCECodeChallenge(code_verifier)
+    let state!: string
+
+    let parameters: Record<string, string> = {
+      redirect_uri,
+      scope,
+      code_challenge,
+      code_challenge_method: 'S256',
+    }
+
+    if (!config.serverMetadata().supportsPKCE()) {
+      /**
+       * We cannot be sure the server supports PKCE so we're going to use state too.
+       * Use of PKCE is backwards compatible even if the AS doesn't support it which
+       * is why we're using it regardless. Like PKCE, random state must be generated
+       * for every redirect to the authorization_endpoint.
+       */
+      state = client.randomState()
+      parameters.state = state
+    }
+
+    let redirectTo: URL = client.buildAuthorizationUrl(config, parameters)
+
+    // now redirect the user to redirectTo.href
+    console.log('redirecting to', redirectTo.href)
+
+    return { state, url: redirectTo.href}
+
   }
 
   getRedirectAuthenticationUrl(): { state: string; url: string } {
