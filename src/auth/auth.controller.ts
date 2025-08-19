@@ -18,9 +18,9 @@ export class AuthController {
 
   @Get('callback')
   async login(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
-    const { idToken, payload } = await this.authService.callback(request)
+    const { idToken, loggedInUser } = await this.authService.callback(request)
     response.cookie('idToken', idToken);
-    return payload
+    return loggedInUser
   }
 
   @Get('logout')

@@ -5,10 +5,12 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtService } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
+import { UsersModule } from '../modules/users/users.module';
+import { UsersService } from '../modules/users/users.service';
 
 
 @Module({
-  imports: [PassportModule, HttpModule],
+  imports: [PassportModule, UsersModule],
   controllers: [AuthController],
   providers: [AuthService, JwtService],
   exports: [PassportModule],

@@ -1,9 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
+import { LoggedInUserDto } from './dto/logged-in-user.dto';
 
 @Injectable()
 export class UsersService {
+  constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
@@ -12,7 +18,10 @@ export class UsersService {
     return `This action returns all users`;
   }
 
-  findOne(id: number) {
+  async findOne(id: string) {
+    if (id) {
+      return this.userRepository.findOneBy({ id })
+    }
     return `This action returns a #${id} user`;
   }
 
@@ -23,4 +32,9 @@ export class UsersService {
   remove(id: number) {
     return `This action removes a #${id} user`;
   }
+
+  upsert(loggedInUserDto: LoggedInUserDto) {
+    return this.userRepository.save(loggedInUserDto)
+  }
+
 }

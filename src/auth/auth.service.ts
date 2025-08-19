@@ -3,6 +3,11 @@ import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import * as client from 'openid-client';
+import { UsersService } from '../modules/users/users.service';
+import { CreateUserDto } from '../modules/users/dto/create-user.dto';
+import { PayloadAuth } from './dto/payload-auth.dto';
+import { LoggedInUserDto } from '../modules/users/dto/logged-in-user.dto';
+import { LoggedInDto } from './dto/logged-in.dto';
 
 @Injectable()
 export class AuthService {
@@ -10,7 +15,7 @@ export class AuthService {
   private jwks: ReturnType<typeof createRemoteJWKSet>;
   private config: client.Configuration;
 
-  constructor(private configService: ConfigService) {}
+  constructor(private configService: ConfigService, private usersService: UsersService) {}
 
   async getJwks() {
     if (this.jwks) {
@@ -53,7 +58,7 @@ export class AuthService {
     return { state, redirectUrl: decodeURIComponent(redirectTo.href) };
   }
 
-  async callback(request: Request): Promise<{ idToken: string; payload: any }> {
+  async callback(request: Request): Promise<{ idToken: string; loggedInUser: LoggedInUserDto }> {
     const getCurrentUrl: (...args: any) => URL = (req: Request) =>
       new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
     const state = `${request.cookies['state']}`;
@@ -69,12 +74,20 @@ export class AuthService {
     const idToken = tokens.id_token!;
 
     const jwks = await this.getJwks();
-    const { payload } = await jwtVerify(idToken, jwks, {
+    const { payload } = await jwtVerify<PayloadAuth>(idToken, jwks, {
       issuer: this.configService.get('OAUTH2_ISSUER'),
       audience: this.configService.get('OAUTH2_CLIENT_ID'),
     });
 
-    return { idToken, payload };
+
+    const loggedInUserDto: LoggedInUserDto = {
+      id: payload.sub,
+      firstName: payload.given_name,
+      lastName: payload.family_name
+    };
+    const loggedInUser = await this.usersService.upsert(loggedInUserDto)
+    console.log('loggedInUser', loggedInUser)
+    return { idToken, loggedInUser };
   }
 
   async logout(request: Request): Promise<string> {
