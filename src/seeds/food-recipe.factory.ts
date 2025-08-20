@@ -3,6 +3,9 @@ import { FoodRecipeEntity } from '../modules/food-recipes/entities/food-recipe.e
 
 import { Difficulty } from '../modules/difficulties/entities/difficulty.entity';
 import { fa, faker } from '@faker-js/faker';
+import { UUID } from 'typeorm/driver/mongodb/bson.typings';
+import { randomUuid } from 'testcontainers';
+import { User } from '../modules/users/entities/user.entity';
 
 const fakeIngredients = (): string => {
   return Array.from({ length: Math.floor(Math.random() * 3) + 5 }, () =>
@@ -21,7 +24,7 @@ export const fakeFoodRecipeEntity = (): FoodRecipeEntity => {
   } as Difficulty;
   foodRecipeEntity.cookingDurationId = faker.number.int({ min: 1, max: 4 });
   foodRecipeEntity.imageUrl = faker.image.url();
-  foodRecipeEntity.userId = -1;
+  foodRecipeEntity.user = { id: randomUuid() } as User;
   return foodRecipeEntity;
 };
 

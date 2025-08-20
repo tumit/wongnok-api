@@ -13,10 +13,12 @@ import {
   ParseIntPipe,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { FoodRecipesService } from './food-recipes.service';
 import { CreateFoodRecipeDto, CreateFoodRecipeDtoResponse } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
+import { JwtAuthGuard } from '@root/src/auth/jwt-auth.guard';
 
 @Controller('food-recipes')
 export class FoodRecipesController {
@@ -58,6 +60,7 @@ export class FoodRecipesController {
     return this.foodRecipesService.update(+id, updateFoodRecipeDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {

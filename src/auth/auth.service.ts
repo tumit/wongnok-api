@@ -71,24 +71,31 @@ export class AuthService {
       },
     )!;
 
-    const idToken = tokens.id_token!;
 
+    const idToken = tokens.id_token!;
+    const loggedInUser = await this.verifyLoggedInUserDto(idToken)
+    console.log('loggedInUser', loggedInUser)
+    return { idToken, loggedInUser };
+
+  }
+
+  async verifyLoggedInUserDto(idToken: string): Promise<LoggedInUserDto> {
     const jwks = await this.getJwks();
     const { payload } = await jwtVerify<PayloadAuth>(idToken, jwks, {
       issuer: this.configService.get('OAUTH2_ISSUER'),
       audience: this.configService.get('OAUTH2_CLIENT_ID'),
     });
 
+    console.log('payload', payload)
 
     const loggedInUserDto: LoggedInUserDto = {
       id: payload.sub,
       firstName: payload.given_name,
       lastName: payload.family_name
     };
-    const loggedInUser = await this.usersService.upsert(loggedInUserDto)
-    console.log('loggedInUser', loggedInUser)
-    return { idToken, loggedInUser };
+    return await this.usersService.upsert(loggedInUserDto)
   }
+
 
   async logout(request: Request): Promise<string> {
     const idToken = `${request.cookies['idToken']}`;

@@ -37,8 +37,7 @@ export class FoodRecipesService {
 
   async create(createFoodRecipeDto: CreateFoodRecipeDto): Promise<CreateFoodRecipeDtoResponse> {
     const result = await this.repository.save({
-      ...createFoodRecipeDto,
-      userId: -1,
+      ...createFoodRecipeDto
     });
 
     return { id: result.id };

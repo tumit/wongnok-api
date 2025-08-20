@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Difficulty } from '../../difficulties/entities/difficulty.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity('food_recipes')
 export class FoodRecipeEntity {
@@ -30,8 +31,9 @@ export class FoodRecipeEntity {
   @Column({ name: 'cooking_duration_id' })
   cookingDurationId: number;
 
-  @Column({ name: 'user_id' })
-  userId: number;
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  user: User;
 
   // @Column({ name: 'difficulty_id' })
   // difficultyId: number;

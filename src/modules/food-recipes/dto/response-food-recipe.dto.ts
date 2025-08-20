@@ -15,6 +15,6 @@ export interface ResponseFoodRecipeDto {
 }
 
 export function toResponseFoodRecipeDto(entity: FoodRecipeEntity): ResponseFoodRecipeDto {
-  const { userId, ...response } = {...entity};
+  const { user, ...response } = {...entity};
   return response;
 }
