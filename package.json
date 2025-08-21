@@ -27,6 +27,7 @@
     "@nestjs/swagger": "^11.2.0",
     "@nestjs/typeorm": "^11.0.0",
     "bcrypt": "^6.0.0",
+    "jest-mock-extended": "^4.0.0",
     "nestjs-zod": "^5.0.0",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
@@ -77,6 +78,10 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@app/(.*)$": "<rootDir>/$1",
+      "^@test/(.*)$": "<rootDir>../test/$1"
+    }
   }
 }

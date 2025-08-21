@@ -3,13 +3,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
+
 import {
   foodRecipeSchema,
   foodRecipeSchemas,
   testCreateFoodRecipeDto,
   testUpdateFoodRecipeDto,
 } from './helper/food-recipes.helper';
+import { AppModule } from '@app/app.module';
 
 describe('FoodRecipeController (e2e)', () => {
   let app: INestApplication<App>;
@@ -83,6 +84,9 @@ describe('FoodRecipeController (e2e)', () => {
 
     return request(app.getHttpServer())
       .delete(`${url}/${created.body.id}`)
-      .expect(200);
+      .expect(200)
+      .expect((res) => {
+        console.log('res.body', res.body)
+      });
   });
 });
