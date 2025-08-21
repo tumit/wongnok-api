@@ -19,18 +19,20 @@ export class FoodRecipesService {
   }
 
   findAll() {
-    return `This action returns all foodRecipes`;
+    return this.foodRecipeRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} foodRecipe`;
+    return this.foodRecipeRepository.findOneBy({ id });
   }
 
   update(id: number, updateFoodRecipeDto: UpdateFoodRecipeDto) {
-    return `This action updates a #${id} foodRecipe`;
+    return this.foodRecipeRepository.save({
+      id, ...updateFoodRecipeDto
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} foodRecipe`;
+    return this.foodRecipeRepository.delete({ id });
   }
 }

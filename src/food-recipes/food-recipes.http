@@ -2,6 +2,9 @@
 ### list
 GET http://localhost:3000/food-recipes
 
+### by id
+GET http://localhost:3000/food-recipes/2
+
 ### create
 POST http://localhost:3000/food-recipes
 Content-Type: application/json
@@ -11,7 +14,56 @@ Content-Type: application/json
   "description": "A classic Italian pasta dish.",
   "ingredient": "Spaghetti, Tomato Sauce, Garlic, Olive Oil",
   "instruction": "Cook spaghetti, heat sauce, mix together.",
-  "imageUrl": "",
+  "imageUrl": "https://foodish-api.com/images/pasta/pasta8.jpg",
   "difficultyId": 1,
   "cookingDurationId": 2
 }
+
+### create 2
+POST http://localhost:3000/food-recipes
+Content-Type: application/json
+
+{
+  "id": 3,
+  "name": "Cupcakes",
+  "description": "Fluffy breakfast pancakes.",
+  "ingredient": "Flour, eggs, milk, baking powder",
+  "instruction": "Mix ingredients. Fry in pan.",
+  "imageUrl": "https://foodish-api.com/images/dessert/dessert14.jpg",
+  "difficultyId": 1,
+  "cookingDurationId": 1
+}
+
+### create 3
+POST http://localhost:3000/food-recipes
+Content-Type: application/json
+
+{
+  "id": 25,
+  "name": "Fried Rice",
+  "description": "Savory rice dish with vegetables.",
+  "ingredient": "Cooked rice, egg, peas, carrots, soy sauce",
+  "instruction": "Fry all ingredients in a wok.",
+  "imageUrl": "https://foodish-api.com/images/rice/rice18.jpg",
+  "cookingDurationId": 2,
+  "difficultyId": 1
+}
+
+
+### update
+PATCH http://localhost:3000/food-recipes/3
+Content-Type: application/json
+
+{
+    "imageUrl": "https://foodish-api.com/images/rice/rice19.jpg"
+}
+
+### by id
+GET http://localhost:3000/food-recipes/3
+
+
+### delete
+DELETE http://localhost:3000/food-recipes/6
+
+### by id
+GET http://localhost:3000/food-recipes/4
