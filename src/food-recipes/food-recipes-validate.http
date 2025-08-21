@@ -1,0 +1,23 @@
+// food-recipes-validate.http
+### create - invalid
+POST http://localhost:3000/food-recipes
+Content-Type: application/json
+
+{
+  "name": "Fried Rice",
+  "description": "Savory rice dish with vegetables.",
+  "ingredient": "Cooked rice, egg, peas, carrots, soy sauce",
+  "instruction": "Fry all ingredients in a wok.",
+  "imageUrl": "https://foodish-api.com/images/rice/rice18.jpg",
+  "cookingDurationId": 2,
+  "difficultyId": "A"
+}
+
+### update - invalid
+PATCH http://localhost:3000/food-recipes/3
+Content-Type: application/json
+
+{
+    "name": "Super Fried Rice !!",
+    "imageUrl": "https://foodish-api.com/images/rice/rice19.jpg"
+}

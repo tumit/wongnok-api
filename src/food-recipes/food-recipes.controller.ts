@@ -1,13 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
-import { FoodRecipesService } from './food-recipes.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post
+} from '@nestjs/common';
 import { CreateFoodRecipeDto } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
+import { FoodRecipesService } from './food-recipes.service';
 
 @Controller('food-recipes')
 export class FoodRecipesController {
   constructor(private readonly foodRecipesService: FoodRecipesService) {}
 
-  @HttpCode(HttpStatus.CREATED)
   @Post()
   create(@Body() createFoodRecipeDto: CreateFoodRecipeDto) {
     return this.foodRecipesService.create(createFoodRecipeDto);
@@ -24,11 +31,13 @@ export class FoodRecipesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFoodRecipeDto: UpdateFoodRecipeDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateFoodRecipeDto: UpdateFoodRecipeDto,
+  ) {
     return this.foodRecipesService.update(+id, updateFoodRecipeDto);
   }
 
-  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.foodRecipesService.remove(+id);
