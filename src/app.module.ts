@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import { customZodError } from './common/validation/custom-zod-error';
 import { dataSourceOpts } from './datasource';
 import { FoodRecipesModule } from './food-recipes/food-recipes.module';
+import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -18,6 +19,7 @@ import { FoodRecipesModule } from './food-recipes/food-recipes.module';
       }),
     }),
     FoodRecipesModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
