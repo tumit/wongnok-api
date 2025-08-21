@@ -1,13 +1,13 @@
 // app.module.ts
 import { Module } from '@nestjs/common';
+import { APP_PIPE } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { createZodValidationPipe } from 'nestjs-zod';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { FoodRecipesModule } from './food-recipes/food-recipes.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { customZodError } from './common/validation/custom-zod-error';
 import { dataSourceOpts } from './datasource';
-import { ZodValidationPipe } from 'nestjs-zod';
-import { APP_PIPE } from '@nestjs/core';
-
+import { FoodRecipesModule } from './food-recipes/food-recipes.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -23,9 +23,9 @@ import { APP_PIPE } from '@nestjs/core';
   providers: [
     {
       provide: APP_PIPE,
-      useClass: ZodValidationPipe,
+      useClass: createZodValidationPipe({ createValidationException: customZodError }),
     },
-    AppService
+    AppService,
   ],
 })
 export class AppModule {}

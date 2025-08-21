@@ -18,7 +18,7 @@ PATCH http://localhost:3000/food-recipes/3
 Content-Type: application/json
 
 {
-    "name": "Super Fried Rice !!",
+    "name": 100,
     "imageUrl": "https//foodish-api.com/images/rice/rice19.jpg"
 }
 
