@@ -13,8 +13,36 @@ Content-Type: application/json
   "difficultyId": "A"
 }
 
-### update - invalid
+### update - invalid - url
 PATCH http://localhost:3000/food-recipes/3
+Content-Type: application/json
+
+{
+    "name": "Super Fried Rice !!",
+    "imageUrl": "https//foodish-api.com/images/rice/rice19.jpg"
+}
+
+### update - invalid path var
+PATCH http://localhost:3000/food-recipes/A
+Content-Type: application/json
+
+{
+    "name": "Super Fried Rice !!",
+    "imageUrl": "https://foodish-api.com/images/rice/rice19.jpg"
+}
+
+### get - invalid
+GET http://localhost:3000/food-recipes/A
+
+### delete - invalid
+DELETE http://localhost:3000/food-recipes/A
+
+
+###
+### validate DB
+###
+### update - existing id
+PATCH http://localhost:3000/food-recipes/999
 Content-Type: application/json
 
 {

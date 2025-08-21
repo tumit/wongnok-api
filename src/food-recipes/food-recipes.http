@@ -55,7 +55,7 @@ PATCH http://localhost:3000/food-recipes/3
 Content-Type: application/json
 
 {
-    "imageUrl": "https://foodish-api.com/images/rice/rice19.jpg"
+    "imageUrl": "https://foodish-api.com/images/rice/rice18.jpg"
 }
 
 ### by id

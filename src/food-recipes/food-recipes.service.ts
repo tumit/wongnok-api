@@ -1,10 +1,10 @@
 // food-recipes.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateFoodRecipeDto } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { FoodRecipe } from './entities/food-recipe.entity';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class FoodRecipesService {
@@ -27,9 +27,14 @@ export class FoodRecipesService {
   }
 
   update(id: number, updateFoodRecipeDto: UpdateFoodRecipeDto) {
-    return this.foodRecipeRepository.save({
-      id, ...updateFoodRecipeDto
-    });
+
+    // return this.foodRecipeRepository.save({ id, ...updateFoodRecipeDto })
+    return this.foodRecipeRepository
+      .findOneByOrFail({ id })
+      .then(() => this.foodRecipeRepository.save({ id, ...updateFoodRecipeDto }))
+      .catch(() => {
+        throw new NotFoundException(`Not found: id=${id}`);
+      });
   }
 
   remove(id: number) {

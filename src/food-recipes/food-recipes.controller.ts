@@ -1,3 +1,4 @@
+// food-recipes.controller.ts
 import {
   Body,
   Controller,
@@ -10,6 +11,7 @@ import {
 import { CreateFoodRecipeDto } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
 import { FoodRecipesService } from './food-recipes.service';
+import { IdParamDto } from '../common/dto/id-param.dto';
 
 @Controller('food-recipes')
 export class FoodRecipesController {
@@ -26,20 +28,20 @@ export class FoodRecipesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.foodRecipesService.findOne(+id);
+  findOne(@Param() param: IdParamDto) {
+    return this.foodRecipesService.findOne(param.id);
   }
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param() param: IdParamDto,
     @Body() updateFoodRecipeDto: UpdateFoodRecipeDto,
   ) {
-    return this.foodRecipesService.update(+id, updateFoodRecipeDto);
+    return this.foodRecipesService.update(param.id, updateFoodRecipeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.foodRecipesService.remove(+id);
+  remove(@Param() param: IdParamDto) {
+    return this.foodRecipesService.remove(param.id);
   }
 }
