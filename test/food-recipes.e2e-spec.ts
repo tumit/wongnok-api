@@ -1,11 +1,12 @@
-// app.e2e-spec.ts
+// food-recipes.e2e-spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 
-describe('AppController (e2e)', () => {
+describe('FoodRecipeController (e2e)', () => {
+
   let app: INestApplication<App>;
 
   beforeEach(async () => {
@@ -17,10 +18,14 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('/food-recipes (GET)', () => {
     return request(app.getHttpServer())
-      .get('/')
+      .get('/food-recipes')
       .expect(200)
-      .expect('Hello World!');
-  });
-});
+      .expect((res) => {
+        console.log('res.body', res.body)
+        expect(res.body).toBeTruthy()
+      });
+  })
+
+})
