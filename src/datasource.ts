@@ -7,7 +7,7 @@ dotenvConfig();
 
 export const dataSourceOpts: DataSourceOptions = {
   type: 'postgres',
-  logging: true,
+  logging: false,
   url: `${process.env.DATABASE_URL}`
 };
 

@@ -4,10 +4,21 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
+import {
+  foodRecipeSchema,
+  foodRecipeSchemas,
+  testCreateFoodRecipeDto,
+  testUpdateFoodRecipeDto,
+} from './helper/food-recipes.helper';
 
 describe('FoodRecipeController (e2e)', () => {
-
   let app: INestApplication<App>;
+
+  const url = '/food-recipes';
+
+  afterAll(async () => {
+    await app.close();
+  });
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -20,12 +31,58 @@ describe('FoodRecipeController (e2e)', () => {
 
   it('/food-recipes (GET)', () => {
     return request(app.getHttpServer())
-      .get('/food-recipes')
+      .get(url)
       .expect(200)
       .expect((res) => {
-        console.log('res.body', res.body)
-        expect(res.body).toBeTruthy()
+        expect(foodRecipeSchemas.safeParse(res.body).success).toBe(true);
       });
-  })
+  });
 
-})
+  it('/food-recipes/:id (GET)', () => {
+    return request(app.getHttpServer())
+      .get(`${url}/2`)
+      .expect(200)
+      .expect((res) => {
+        expect(foodRecipeSchema.safeParse(res.body).success).toBe(true);
+      });
+  });
+
+  it('/food-recipes/ (POST)', () => {
+    return request(app.getHttpServer())
+      .post(url)
+      .send(testCreateFoodRecipeDto())
+      .expect(201)
+      .expect((res) => {
+        expect(foodRecipeSchema.safeParse(res.body).success).toBe(true);
+      });
+  });
+
+  it('/food-recipes/:id (PATCH)', async () => {
+    const created = await request(app.getHttpServer())
+      .post(url)
+      .send(testCreateFoodRecipeDto())
+      .expect(201);
+
+    return request(app.getHttpServer())
+      .patch(`${url}/${created.body.id}`)
+      .send(testUpdateFoodRecipeDto())
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toEqual({
+          ...testUpdateFoodRecipeDto(),
+          id: created.body.id,
+        });
+      });
+  });
+
+  it('/food-recipes/:id (DELETE)', async () => {
+    const created = await request(app.getHttpServer())
+      .post(url)
+      .send(testCreateFoodRecipeDto())
+      .expect(201);
+
+    return request(app.getHttpServer())
+      .delete(`${url}/${created.body.id}`)
+      .expect(200);
+  });
+});
