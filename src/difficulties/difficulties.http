@@ -1,0 +1,2 @@
+// difficulties.http
+GET http://localhost:3000/difficulties

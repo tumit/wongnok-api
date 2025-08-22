@@ -1,0 +1,2 @@
+// cooking-durations.http
+GET http://localhost:3000/cooking-durations
