@@ -69,5 +69,9 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "moduleNameMapper": {
+    "^@app/(.*)$": "<rootDir>/$1",
+    "^@test/(.*)$": "<rootDir>../test/$1"
   }
 }
