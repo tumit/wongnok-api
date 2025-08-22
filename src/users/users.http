@@ -1,0 +1,30 @@
+# users.http
+### create
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "username": "u1001",
+    "password": "changeit",
+    "role": "USER"
+}
+
+### create 2
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "username": "u102",
+    "password": "changeit",
+    "role": "USER"
+}
+
+### create 3
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "username": "u103",
+    "password": "changeit",
+    "role": "USER"
+}

@@ -1,0 +1,20 @@
+// users-validate.http
+
+### create - no username
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "password": "changeit",
+    "role": "USER"
+}
+
+### create - blank username
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "username": "",
+    "password": "changeit",
+    "role": "USER"
+}

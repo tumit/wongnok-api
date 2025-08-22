@@ -6,6 +6,9 @@ import { DifficultiesModule } from './difficulties/difficulties.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOpts } from './datasource';
 import { CookingDurationsModule } from './cooking-durations/cooking-durations.module';
+import { UsersModule } from './users/users.module';
+import { ZodValidationPipe } from 'nestjs-zod';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -18,8 +21,15 @@ import { CookingDurationsModule } from './cooking-durations/cooking-durations.mo
     }),
     DifficultiesModule,
     CookingDurationsModule,
+    UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ZodValidationPipe
+    },
+    AppService,
+  ],
 })
 export class AppModule {}
