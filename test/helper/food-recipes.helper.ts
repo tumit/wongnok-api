@@ -64,6 +64,26 @@ export function testFindOne(): FoodRecipe {
   };
 }
 
+export function testCreated(): FoodRecipe {
+  return {
+    id: 2,
+    name: 'Spaghetti',
+    description: 'A classic Italian pasta dish.',
+    ingredient: 'Spaghetti, Tomato Sauce, Garlic, Olive Oil',
+    instruction: 'Cook spaghetti, heat sauce, mix together.',
+    imageUrl: 'https://foodish-api.com/images/pasta/pasta8.jpg',
+    difficultyId: 1,
+    cookingDurationId: 2,
+  };
+}
+
+export function testUpdatedUrl(): FoodRecipe {
+  return {
+    id: 2,
+    imageUrl: 'https://foodish-api.com/images/pasta/pasta8.jpg'
+  } as FoodRecipe;
+}
+
 export function testDelete(): { raw: [], affected: number } {
   return { raw: [], affected: 1 }
 }
