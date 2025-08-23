@@ -13,8 +13,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: LoggedInDto): LoggedInDto {
-    console.log('payload', payload)
-    return payload;
+  validate(user: LoggedInDto): LoggedInDto {
+    // not special validate just jwt
+    return user;
   }
 }
