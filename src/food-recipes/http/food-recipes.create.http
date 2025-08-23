@@ -1,4 +1,4 @@
-// food-recipes.http
+// food-recipes.create.http
 ### list
 GET http://localhost:3000/food-recipes
 
@@ -44,7 +44,7 @@ Content-Type: application/json
   }
 }
 
-### create 3
+### create 3 - invalid no user
 POST http://localhost:3000/food-recipes
 Content-Type: application/json
 

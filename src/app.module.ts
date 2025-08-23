@@ -10,6 +10,8 @@ import { UsersModule } from './users/users.module';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { APP_PIPE } from '@nestjs/core';
 import { FoodRecipesModule } from './food-recipes/food-recipes.module';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,16 +22,20 @@ import { FoodRecipesModule } from './food-recipes/food-recipes.module';
         synchronize: true,
       }),
     }),
+    JwtModule.registerAsync({
+      useFactory: () => ({ secret: `${process.env.JWT_SECRET}` }),
+    }),
     DifficultiesModule,
     CookingDurationsModule,
     UsersModule,
     FoodRecipesModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
     {
       provide: APP_PIPE,
-      useClass: ZodValidationPipe
+      useClass: ZodValidationPipe,
     },
     AppService,
   ],

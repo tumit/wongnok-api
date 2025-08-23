@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+// food-recipes.service.ts
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFoodRecipeDto } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -22,11 +23,16 @@ export class FoodRecipesService {
     return `This action returns a #${id} foodRecipe`;
   }
 
-  update(id: number, updateFoodRecipeDto: UpdateFoodRecipeDto) {
-    return `This action updates a #${id} foodRecipe`;
+  async update(id: number, updateFoodRecipeDto: UpdateFoodRecipeDto) {
+    return this.repository
+      .findOneByOrFail({ id })
+      .then(() => this.repository.save({ id, ...updateFoodRecipeDto }))
+      .catch(() => {
+        throw new NotFoundException(`Not found: id=${id}`);
+      });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} foodRecipe`;
+    return this.repository.delete({ id });
   }
 }

@@ -8,9 +8,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>,
-  ) {}
+  constructor(@InjectRepository(User) private repository: Repository<User>) {}
 
   async create(createUserDto: CreateUserDto) {
     // 10 = hash password 2^10 = 1024 rounds
@@ -18,10 +16,16 @@ export class UsersService {
 
     const user = { ...createUserDto, password: hashedPassword };
 
-    const savedUser = await this.usersRepository.save(user);
+    const savedUser = await this.repository.save(user);
 
     const { password, ...userWithoutPassword } = savedUser;
 
+    return userWithoutPassword;
+  }
+
+  async findOne(id: number) {
+    const user = await this.repository.findOneByOrFail({ id });
+    const { password, ...userWithoutPassword } = user;
     return userWithoutPassword;
   }
 }

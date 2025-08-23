@@ -1,0 +1,35 @@
+// food-recipes.update.http
+### update
+PATCH http://localhost:3000/food-recipes/6
+Content-Type: application/json
+
+{
+  "imageUrl": "https://foodish-api.com/images/rice/rice19.jpg"
+}
+
+### update - invalid url format
+PATCH http://localhost:3000/food-recipes/6
+Content-Type: application/json
+
+{
+    "name": "Super Fried Rice !!",
+    "imageUrl": "https//foodish-api.com/images/rice/rice18.jpg"
+}
+
+### update - invalid path variable type
+PATCH http://localhost:3000/food-recipes/A
+Content-Type: application/json
+
+{
+    "name": "Super Fried Rice !!",
+    "imageUrl": "https://foodish-api.com/images/rice/rice19.jpg"
+}
+
+### update - not found id
+PATCH http://localhost:3000/food-recipes/999
+Content-Type: application/json
+
+{
+    "name": "Super Fried Rice !!",
+    "imageUrl": "https://foodish-api.com/images/rice/rice18.jpg"
+}

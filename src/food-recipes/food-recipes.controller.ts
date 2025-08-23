@@ -1,7 +1,9 @@
+// food-recipes.controller.ts
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { FoodRecipesService } from './food-recipes.service';
 import { CreateFoodRecipeDto } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
+import { IdParamDto } from '@app/common/dto/id-param.dto';
 
 @Controller('food-recipes')
 export class FoodRecipesController {
@@ -23,12 +25,12 @@ export class FoodRecipesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFoodRecipeDto: UpdateFoodRecipeDto) {
-    return this.foodRecipesService.update(+id, updateFoodRecipeDto);
+  update(@Param() param: IdParamDto, @Body() updateFoodRecipeDto: UpdateFoodRecipeDto) {
+    return this.foodRecipesService.update(param.id, updateFoodRecipeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.foodRecipesService.remove(+id);
+  remove(@Param() param: IdParamDto) {
+    return this.foodRecipesService.remove(param.id);
   }
 }

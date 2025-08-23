@@ -4,7 +4,7 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "username": "u1001",
+    "username": "u101",
     "password": "changeit",
     "role": "USER"
 }
@@ -28,3 +28,22 @@ Content-Type: application/json
     "password": "changeit",
     "role": "USER"
 }
+
+### get
+GET http://localhost:3000/users/1
+
+### get with valid token
+GET http://localhost:3000/users/1
+Authorization: Bearer VALID_TOKEN
+
+### get with invalid token
+GET http://localhost:3000/users/1
+Authorization: Bearer INVALID_TOKEN
+
+
+### get - invalid path
+GET http://localhost:3000/users/A
+
+### get - invalid path with Authorization
+GET http://localhost:3000/users/A
+Authorization: Bearer VALID_TOKEN
