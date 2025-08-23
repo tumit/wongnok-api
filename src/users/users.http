@@ -30,20 +30,20 @@ Content-Type: application/json
 }
 
 ### get
-GET http://localhost:3000/users/1
+GET http://localhost:3000/users/u101
 
 ### get with valid token
-GET http://localhost:3000/users/1
+GET http://localhost:3000/users/u101
 Authorization: Bearer VALID_TOKEN
 
 ### get with invalid token
-GET http://localhost:3000/users/1
+GET http://localhost:3000/users/u101
 Authorization: Bearer INVALID_TOKEN
 
 
 ### get - invalid path
-GET http://localhost:3000/users/A
+GET http://localhost:3000/users/100
 
 ### get - invalid path with Authorization
-GET http://localhost:3000/users/A
+GET http://localhost:3000/users/u
 Authorization: Bearer VALID_TOKEN
