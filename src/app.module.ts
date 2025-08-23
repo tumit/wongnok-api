@@ -22,9 +22,6 @@ import { AuthModule } from './auth/auth.module';
         synchronize: true,
       }),
     }),
-    JwtModule.registerAsync({
-      useFactory: () => ({ secret: `${process.env.JWT_SECRET}` }),
-    }),
     DifficultiesModule,
     CookingDurationsModule,
     UsersModule,

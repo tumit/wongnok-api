@@ -24,9 +24,7 @@ export class UsersService {
   }
 
   async findByUsername(username: string) {
-    const user = await this.repository.findOneByOrFail({ username });
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+    return this.repository.findOneByOrFail({ username });
   }
 
 }
