@@ -1,0 +1,33 @@
+// food-recipes.rating.http
+
+### auth login
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "username": "u103",
+    "password": "changeit"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+### update
+PUT http://localhost:3000/food-recipes/19/ratings
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "score": 3
+}
+
+
+### update
+PUT http://localhost:3000/food-recipes/20/ratings
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "score": 4
+}

@@ -1,11 +1,36 @@
 // food-recipes.update.http
+
+### auth login
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "username": "u101",
+    "password": "changeit"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
 ### update
-PATCH http://localhost:3000/food-recipes/6
+PATCH http://localhost:3000/food-recipes/19
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
   "imageUrl": "https://foodish-api.com/images/rice/rice19.jpg"
 }
+
+### update own
+PATCH http://localhost:3000/food-recipes/11
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "imageUrl": "https://foodish-api.com/images/rice/rice19.jpg"
+}
+
 
 ### update - invalid url format
 PATCH http://localhost:3000/food-recipes/6

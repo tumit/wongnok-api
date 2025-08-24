@@ -1,9 +1,20 @@
 // food-recipes.create.http
-### list
-GET http://localhost:3000/food-recipes
+### auth login
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
 
-### create 1
+{
+    "username": "u101",
+    "password": "changeit"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+### create success 1
 POST http://localhost:3000/food-recipes
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
@@ -17,14 +28,12 @@ Content-Type: application/json
   },
   "cookingDuration": {
     "id": 2
-  },
-  "user": {
-    "id": 1
   }
 }
 
-### create 2
+### create success 2
 POST http://localhost:3000/food-recipes
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
@@ -38,18 +47,14 @@ Content-Type: application/json
   },
   "cookingDuration": {
     "id": 3
-  },
-  "user": {
-    "id": 1
   }
 }
 
-### create 3 - invalid no user
+### create invalid not token
 POST http://localhost:3000/food-recipes
 Content-Type: application/json
 
 {
-  "id": 3,
   "name": "Fried Rice",
   "description": "Savory rice dish with vegetables.",
   "ingredient": "Cooked rice, egg, peas, carrots, soy sauce",
@@ -60,5 +65,25 @@ Content-Type: application/json
   },
   "cookingDuration": {
     "id": 4
+  }
+}
+
+
+### create invalid url & cookingDuration
+POST http://localhost:3000/food-recipes
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Fried Rice",
+  "description": "Savory rice dish with vegetables.",
+  "ingredient": "Cooked rice, egg, peas, carrots, soy sauce",
+  "instruction": "Fry all ingredients in a wok.",
+  "imageUrl": "https//foodish-api.com/images/rice/rice19.jpg",
+  "difficulty": {
+    "id": 1
+  },
+  "cookingDuration": {
+    "id": "A"
   }
 }

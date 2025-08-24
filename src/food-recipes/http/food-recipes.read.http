@@ -1,3 +1,7 @@
 // food-recipes.read.http
 ### list
 GET http://localhost:3000/food-recipes
+
+
+### get
+GET http://localhost:3000/food-recipes/19
