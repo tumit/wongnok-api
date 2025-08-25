@@ -11,12 +11,14 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CreateFoodRecipeDto } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
 import { FoodRecipesService } from './food-recipes.service';
 import { RatingDto } from './dto/rating.dto';
+import { PagingDto } from '@app/common/dto/paging.dto';
 
 @Controller('food-recipes')
 export class FoodRecipesController {
@@ -31,14 +33,20 @@ export class FoodRecipesController {
     return this.foodRecipesService.create(createFoodRecipeDto, userId);
   }
 
+  @Get('search')
+  search(@Query() paging: PagingDto) {
+    console.log(paging)
+    return this.foodRecipesService.search(paging);
+  }
+
   @Get()
   findAll() {
     return this.foodRecipesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.foodRecipesService.findOne(+id);
+  findOne(@Param() param: IdParamDto) {
+    return this.foodRecipesService.findOne(param.id);
   }
 
   @Patch(':id')
