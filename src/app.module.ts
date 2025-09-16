@@ -12,6 +12,7 @@ import { CookingDurationsModule } from './cooking-durations/cooking-durations.mo
       useFactory: () => ({
         ...dataSourceOptions,
         autoLoadEntities: true,
+        synchronize: true,
       })
     }),
     DifficultiesModule,

@@ -1,26 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCookingDurationDto } from './dto/create-cooking-duration.dto';
-import { UpdateCookingDurationDto } from './dto/update-cooking-duration.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CookingDuration } from './entities/cooking-duration.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CookingDurationsService {
-  create(createCookingDurationDto: CreateCookingDurationDto) {
-    return 'This action adds a new cookingDuration';
-  }
+
+  constructor(
+    @InjectRepository(CookingDuration) 
+    private readonly repository: Repository<CookingDuration>
+  ) {}
 
   findAll() {
-    return `This action returns all cookingDurations`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} cookingDuration`;
-  }
-
-  update(id: number, updateCookingDurationDto: UpdateCookingDurationDto) {
-    return `This action updates a #${id} cookingDuration`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} cookingDuration`;
+    return this.repository.find();
   }
 }
