@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { DifficultiesModule } from './difficulties/difficulties.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './data-source';
+import { CookingDurationsModule } from './cooking-durations/cooking-durations.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { dataSourceOptions } from './data-source';
         autoLoadEntities: true,
       })
     }),
-    DifficultiesModule
+    DifficultiesModule,
+    CookingDurationsModule
   ],
   controllers: [AppController],
   providers: [AppService],
