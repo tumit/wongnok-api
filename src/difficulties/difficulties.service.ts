@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { EntityManager, Repository } from 'typeorm';
+import { Difficulty } from './entities/difficulty.entity';
 
 @Injectable()
 export class DifficultiesService {
 
   constructor(
-    @InjectEntityManager() 
-    private entityManager: EntityManager
+    @InjectRepository(Difficulty)
+    private readonly repository: Repository<Difficulty>
   ) { }
 
   findAll() {
-    return this.entityManager.query(`select * from difficulties`);
+    return this.repository.find();
   }
 
 }
