@@ -1,0 +1,8 @@
+POST /users
+Content-Type: application/json
+
+{
+    "username": "u101",
+    "password": "changeit",
+    "role": "USER"
+}

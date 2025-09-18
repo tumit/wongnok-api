@@ -5,6 +5,7 @@ import { DifficultiesModule } from './difficulties/difficulties.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './data-source';
 import { CookingDurationsModule } from './cooking-durations/cooking-durations.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { CookingDurationsModule } from './cooking-durations/cooking-durations.mo
       })
     }),
     DifficultiesModule,
-    CookingDurationsModule
+    CookingDurationsModule,
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
