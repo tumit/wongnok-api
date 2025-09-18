@@ -12,13 +12,17 @@ export class User {
   id: number;
 
   @Column({
-    unique: true
+    unique: true,
+    nullable: false,
   })
   username: string;
 
   @Column()  
   password: string;
 
-  @Column()
+  @Column({
+    nullable: false,
+    default: Role.USER,
+  })
   role: Role
 }
