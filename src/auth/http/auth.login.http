@@ -1,0 +1,9 @@
+// auth.login.http
+### case: login success
+POST http://localhost:3000/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "username": "u105",
+    "password": "changeit"
+}
