@@ -27,4 +27,9 @@ export class UsersService {
     // save new user with hashed password
     return this.repository.save(user);
   }
+
+  findByUsername(username: string) {
+    return this.repository.findOneByOrFail({ username })
+  }
+
 }
