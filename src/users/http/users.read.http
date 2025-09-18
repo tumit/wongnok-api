@@ -1,2 +1,2 @@
 ### get
-GET /users/u105
+GET http://localhost:3000/api/v1/users/u105
