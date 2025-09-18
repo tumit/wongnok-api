@@ -8,6 +8,7 @@ import { CookingDurationsModule } from './cooking-durations/cooking-durations.mo
 import { UsersModule } from './users/users.module';
 import { APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { ZodValidationPipe } from 'nestjs-zod';
     }),
     DifficultiesModule,
     CookingDurationsModule,
-    UsersModule
+    UsersModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [
