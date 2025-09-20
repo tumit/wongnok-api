@@ -46,4 +46,10 @@ export class AuthService {
     return { accessToken, refreshToken }
   }
 
+  refreshToken(loggedInDto: LoggedInDto): { accessToken: string } {
+    const accessToken = this.jwtService.sign(loggedInDto)
+    return  { accessToken }
+  }
+
+
 }
