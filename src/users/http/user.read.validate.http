@@ -13,3 +13,17 @@ GET http://localhost:3000/api/v1/users/u101
 ### logged in but token not valid = 403 
 GET http://localhost:3000/api/v1/users/u101
 Authorization: Bearer INVALID_TOKEN
+
+### case: login
+# @name u105
+POST http://localhost:3000/api/v1/auth/login
+Content-Type: application/json
+{
+  "username": "u105",
+  "password": "changeit"
+}
+
+### case: valid token
+# @ref u105
+GET http://localhost:3000/api/v1/users/me
+Authorization: Bearer {{u105.accessToken}}
