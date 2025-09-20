@@ -105,4 +105,21 @@ export class KeycloakService {
 
     return { idToken, keycloakPayload }
   }
+
+  async logout(idToken: string): Promise<string> {
+    
+    const config = await this.getConfig()
+
+    const logoutUrl = client.buildEndSessionUrl(
+      config,
+      {
+        id_token_hint: idToken,
+        post_logout_redirect_uri: this.keycloakConfig.postLogoutRedirectUri
+      }
+    )
+   
+    console.log('logoutUrl', logoutUrl)
+    return decodeURIComponent(logoutUrl.href)
+  }
+
 }
