@@ -32,4 +32,13 @@ export class UsersService {
     return this.repository.findOneByOrFail({ username })
   }
 
+  async upsertByKeycloakId(username: string, keycloakId: string): Promise<User> {
+    const result = await this.repository.upsert(
+      { username, keycloakId },
+      { conflictPaths: ['keycloakId'] }
+    )
+    console.log('upsert', result)
+    return this.repository.findOneByOrFail({ keycloakId })
+  }
+
 }

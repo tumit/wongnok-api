@@ -1,15 +1,26 @@
 // keycloak.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { KeycloakParamsDto } from './dto/keycloak-params.dto';
 import client from 'openid-client';
 import { KeycloakConfig } from './keycloak.config';
+import { TokensDto } from './dto/tokens.dto';
+import { KeycloakPayload } from './dto/keycloak-payload.dto';
+import { JwtService } from '@nestjs/jwt';
+import { UsersService } from '@app/users/users.service';
+import { LoggedInDto } from './dto/logged-in.dto';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class KeycloakService {
 
   private config: client.Configuration;
 
-  constructor(private keycloakConfig: KeycloakConfig) { }
+  constructor(
+    private keycloakConfig: KeycloakConfig,
+    private jwtService: JwtService,
+    private usersService: UsersService,
+    private authService: AuthService
+  ) { }
 
   private async getConfig() {
 
@@ -24,7 +35,7 @@ export class KeycloakService {
     const clientSecret = this.keycloakConfig.clientSecret
 
     // discovery
-    this.config = await client.discovery(server, clientId, clientSecret + 'x')
+    this.config = await client.discovery(server, clientId, clientSecret)
 
     // this config
     return this.config
@@ -56,4 +67,42 @@ export class KeycloakService {
 
   }
 
+  async login(keycloakParamsDto: KeycloakParamsDto): Promise<{ idToken: string, tokensDto: TokensDto }> {
+    // get idToken & keycloakPayload
+    const { idToken, keycloakPayload } = await this.authorizationByCode(keycloakParamsDto)
+    // upsert user by keycloakId
+    const user = await this.usersService.upsertByKeycloakId(keycloakPayload.preferred_username, keycloakPayload.sub)
+
+    // generate TokensDto { accessToken, refreshToken }
+    const loggedInDto: LoggedInDto = {
+      username: user.username,
+      role: user.role
+    }
+
+    const tokensDto = this.authService.generateTokens(loggedInDto);
+
+    return { idToken, tokensDto }
+  }
+
+  private async authorizationByCode(keycloakParamsDto: KeycloakParamsDto): Promise<{ idToken: string, keycloakPayload: KeycloakPayload }> {
+    // call keycloak for tokens
+    const tokens: client.TokenEndpointResponse =
+      await client.authorizationCodeGrant(
+        await this.getConfig(),
+        new URL(`${this.keycloakConfig.callbackUrl}?${keycloakParamsDto.url}`),
+        {
+          pkceCodeVerifier: keycloakParamsDto.codeVerifier,
+          expectedState: keycloakParamsDto.state
+        }
+      );
+
+    if (!tokens.id_token) {
+      throw new UnauthorizedException('tokens.id_token should be not blank')
+    }
+
+    const idToken = tokens.id_token
+    const keycloakPayload = await this.jwtService.decode(idToken)
+
+    return { idToken, keycloakPayload }
+  }
 }

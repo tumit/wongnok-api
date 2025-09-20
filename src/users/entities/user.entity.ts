@@ -17,7 +17,9 @@ export class User {
   })
   username: string;
 
-  @Column()  
+  @Column({
+    nullable: true
+  })  
   password: string;
 
   @Column({
@@ -25,4 +27,7 @@ export class User {
     default: Role.USER,
   })
   role: Role
+
+  @Column({ name: 'keycloak_id', unique: true, nullable: true })
+  keycloakId: string
 }
