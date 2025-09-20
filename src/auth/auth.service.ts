@@ -5,10 +5,14 @@ import { LoginDto } from './dto/login.dto';
 import { TokensDto } from './dto/tokens.dto';
 import { UsersService } from '@app/users/users.service';
 import bcrypt from 'bcrypt'
+import { LoggedInDto } from './dto/logged-in.dto';
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
 
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService, 
+    private jwtService: JwtService) {}
 
   async login(loginDto: LoginDto): Promise<TokensDto> {
 
@@ -21,7 +25,18 @@ export class AuthService {
       throw new UnauthorizedException(`wrong password: username=${loginDto.username}`)
     }
 
-    const accessToken = 'VALID_TOKEN-' + user.username
-    return { accessToken };
+    // return token
+    const loggedInDto: LoggedInDto = {
+      username: user.username,
+      role: user.role
+    }
+    
+    return this.generateTokens(loggedInDto);
   }
+
+  generateTokens(loggedInDto: LoggedInDto): TokensDto {
+    const accessToken = this.jwtService.sign(loggedInDto)
+    return { accessToken }
+  }
+
 }
