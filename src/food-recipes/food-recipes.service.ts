@@ -1,11 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFoodRecipeDto } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
+import { LoggedInDto } from '@app/auth/dto/logged-in.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FoodRecipe } from './entities/food-recipe.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class FoodRecipesService {
-  create(createFoodRecipeDto: CreateFoodRecipeDto) {
-    return 'This action adds a new foodRecipe';
+
+  constructor(@InjectRepository(FoodRecipe) private repository: Repository<FoodRecipe>) {}
+
+  create(createFoodRecipeDto: CreateFoodRecipeDto, loggedInDto: LoggedInDto) {
+    return this.repository.save({
+      ...createFoodRecipeDto,
+      user: { username: loggedInDto.username }
+    });
   }
 
   findAll() {
