@@ -5,6 +5,7 @@ import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { LoggedInDto } from '@app/auth/dto/logged-in.dto';
 import { IdDto } from '@app/common/dto/id.dto';
+import { Paginate, PaginateQuery } from 'nestjs-paginate';
 
 @Controller('food-recipes')
 export class FoodRecipesController {
@@ -16,16 +17,17 @@ export class FoodRecipesController {
     return this.foodRecipesService.create(createFoodRecipeDto, req.user);
   }
 
+
   @Get()
-  findAll() {
-    return this.foodRecipesService.findAll();
+  search(@Paginate() query: PaginateQuery) {
+    return this.foodRecipesService.search(query);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.foodRecipesService.findOne(+id);
+  findOne(@Param() idDto: IdDto) {
+    return this.foodRecipesService.findOne(idDto.id);
   }
-
+  
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
   update(
