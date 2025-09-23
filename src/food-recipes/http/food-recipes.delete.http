@@ -1,0 +1,38 @@
+// food-recipes.delete.http
+### auth login
+# @name u105
+POST http://localhost:3000/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "username": "u105",
+    "password": "changeit"
+}
+
+### create success
+# @ref u105
+# @name foodRecipeCreated
+POST http://localhost:3000/api/v1/food-recipes
+Authorization: Bearer {{u105.accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Spaghetti F1",
+  "description": "A classic Italian pasta dish.",
+  "ingredient": "Spaghetti, Tomato Sauce, Garlic, Olive Oil",
+  "instruction": "Cook spaghetti, heat sauce, mix together.",
+  "imageUrl": "https://foodish-api.com/images/pasta/pasta16.jpg",
+  "difficulty": {
+    "id": 1
+  },
+  "cookingDuration": {
+    "id": 2
+  }
+}
+
+### delete
+# @ref u105
+# @ref foodRecipeCreated
+DELETE http://localhost:3000/api/v1/food-recipes/{{foodRecipeCreated.id}}
+Authorization: Bearer {{u105.accessToken}}
+Content-Type: application/json

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, HttpCode } from '@nestjs/common';
 import { FoodRecipesService } from './food-recipes.service';
 import { CreateFoodRecipeDto } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
@@ -35,8 +35,10 @@ export class FoodRecipesController {
     return this.foodRecipesService.update(idDto.id, updateFoodRecipeDto, req.user);
   }
 
+  @HttpCode(204)
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.foodRecipesService.remove(+id);
+  remove(@Param() idDto: IdDto, @Req() req: { user: LoggedInDto }) {
+    return this.foodRecipesService.remove(idDto.id, req.user);
   }
 }

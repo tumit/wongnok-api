@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class FoodRecipesService {
 
-  constructor(@InjectRepository(FoodRecipe) private repository: Repository<FoodRecipe>) {}
+  constructor(@InjectRepository(FoodRecipe) private repository: Repository<FoodRecipe>) { }
 
   create(createFoodRecipeDto: CreateFoodRecipeDto, loggedInDto: LoggedInDto) {
     return this.repository.save({
@@ -28,13 +28,17 @@ export class FoodRecipesService {
 
   async update(id: number, updateFoodRecipeDto: UpdateFoodRecipeDto, loggedInDto: LoggedInDto) {
     return this.repository.findOneByOrFail({ id, user: { username: loggedInDto.username } })
-      .then(() => this.repository.save({ id, ...updateFoodRecipeDto}))
+      .then(() => this.repository.save({ id, ...updateFoodRecipeDto }))
       .catch(() => {
         throw new NotFoundException(`Not found id=${id}`)
       });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} foodRecipe`;
+  async remove(id: number, loggedInDto: LoggedInDto) {
+    return this.repository.findOneByOrFail({ id, user: { username: loggedInDto.username } })
+      .then(() => this.repository.delete({ id }))
+      .catch(() => {
+        throw new NotFoundException(`Not found: id=${id}`)
+      });
   }
 }
