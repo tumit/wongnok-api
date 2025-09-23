@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFoodRecipeDto } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
 import { LoggedInDto } from '@app/auth/dto/logged-in.dto';
@@ -26,8 +26,12 @@ export class FoodRecipesService {
     return `This action returns a #${id} foodRecipe`;
   }
 
-  update(id: number, updateFoodRecipeDto: UpdateFoodRecipeDto) {
-    return `This action updates a #${id} foodRecipe`;
+  async update(id: number, updateFoodRecipeDto: UpdateFoodRecipeDto, loggedInDto: LoggedInDto) {
+    return this.repository.findOneByOrFail({ id, user: { username: loggedInDto.username } })
+      .then(() => this.repository.save({ id, ...updateFoodRecipeDto}))
+      .catch(() => {
+        throw new NotFoundException(`Not found id=${id}`)
+      });
   }
 
   remove(id: number) {

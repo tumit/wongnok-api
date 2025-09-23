@@ -25,9 +25,13 @@ export class FoodRecipesController {
     return this.foodRecipesService.findOne(+id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFoodRecipeDto: UpdateFoodRecipeDto) {
-    return this.foodRecipesService.update(+id, updateFoodRecipeDto);
+  update(
+    @Param('id') id: string, 
+    @Body() updateFoodRecipeDto: UpdateFoodRecipeDto, 
+    @Req() req: { user: LoggedInDto }) {
+    return this.foodRecipesService.update(+id, updateFoodRecipeDto, req.user);
   }
 
   @Delete(':id')
