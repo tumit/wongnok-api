@@ -4,6 +4,7 @@ import { CreateFoodRecipeDto } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { LoggedInDto } from '@app/auth/dto/logged-in.dto';
+import { IdDto } from '@app/common/dto/id.dto';
 
 @Controller('food-recipes')
 export class FoodRecipesController {
@@ -28,10 +29,10 @@ export class FoodRecipesController {
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
   update(
-    @Param('id') id: string, 
+    @Param() idDto: IdDto, 
     @Body() updateFoodRecipeDto: UpdateFoodRecipeDto, 
     @Req() req: { user: LoggedInDto }) {
-    return this.foodRecipesService.update(+id, updateFoodRecipeDto, req.user);
+    return this.foodRecipesService.update(idDto.id, updateFoodRecipeDto, req.user);
   }
 
   @Delete(':id')
