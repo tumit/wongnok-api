@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, HttpCode, Put } from '@nestjs/common';
-import { FoodRecipesService } from './food-recipes.service';
+import { FoodRecipesService, paginateConfig } from './food-recipes.service';
 import { CreateFoodRecipeDto } from './dto/create-food-recipe.dto';
 import { UpdateFoodRecipeDto } from './dto/update-food-recipe.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { LoggedInDto } from '@app/auth/dto/logged-in.dto';
 import { IdDto } from '@app/common/dto/id.dto';
-import { Paginate, PaginateQuery } from 'nestjs-paginate';
+import { ApiPaginationQuery, Paginate, PaginateQuery } from 'nestjs-paginate';
 import { RatingDto } from './dto/rating.dto';
 import { RatingService } from './rating.service';
 
@@ -23,6 +23,7 @@ export class FoodRecipesController {
   }
 
 
+  @ApiPaginationQuery(paginateConfig)
   @Get()
   search(@Paginate() query: PaginateQuery) {
     return this.foodRecipesService.search(query);

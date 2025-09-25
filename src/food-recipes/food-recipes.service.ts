@@ -7,7 +7,7 @@ import { FoodRecipe } from './entities/food-recipe.entity';
 import { Repository } from 'typeorm';
 import { paginate, PaginateConfig, PaginateQuery } from 'nestjs-paginate';
 
-const paginateConfig: PaginateConfig<FoodRecipe> = {
+export const paginateConfig: PaginateConfig<FoodRecipe> = {
   sortableColumns: ['name', 'avgRating', 'ratingCount'],
   searchableColumns: ['name', 'ingredient'],
 };
