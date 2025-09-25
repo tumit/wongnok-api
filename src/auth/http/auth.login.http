@@ -5,7 +5,7 @@ Content-Type: application/json
 
 {
     "username": "u105",
-    "password": "changeit"
+    "password": "changeitx"
 }
 
 ### case: not found username
